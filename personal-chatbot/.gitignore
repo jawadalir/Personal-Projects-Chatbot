@@ -1,13 +1,14 @@
 # Dependencies
 node_modules/
-client/node_modules/
-server/node_modules/
+venv/
+__pycache__/
+*.pyc
+.Python
 
-# Build output
+# Build
 client/dist/
 .next/
-out/
-build/
+dist/
 
 # Environment (never commit secrets)
 .env
@@ -15,13 +16,7 @@ build/
 .env*.local
 !.env.example
 
-# Logs & OS
-npm-debug.log*
+# OS & logs
 .DS_Store
-
-# IDE
+npm-debug.log*
 .vercel
-
-# Python virtual env
-venv/
-__pycache__/

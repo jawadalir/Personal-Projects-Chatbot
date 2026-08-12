@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Jawad Ali — AI Engineer | Chat</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="hero">
+        <p class="eyebrow">AI Portfolio Representative</p>
+        <h1 id="page-title">Chat with me</h1>
+        <p id="page-subtitle" class="subtitle">Loading...</p>
+      </header>
+
+      <main class="chat-card">
+        <div class="chat-header">
+          <div class="avatar" id="avatar">JA</div>
+          <div>
+            <h2 id="chat-name">Jawad Ali</h2>
+            <p id="chat-title">AI Engineer</p>
+          </div>
+        </div>
+
+        <div class="messages" id="messages"></div>
+
+        <div class="starters" id="starters"></div>
+
+        <p class="error" id="error" hidden></p>
+
+        <form class="input-row" id="chat-form">
+          <input
+            type="text"
+            id="message-input"
+            placeholder="Ask me anything..."
+            autocomplete="off"
+          />
+          <button type="submit" id="send-btn">Send</button>
+        </form>
+      </main>
+    </div>
+
+    <script src="/app.js"></script>
+  </body>
+</html>
