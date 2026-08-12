@@ -39,28 +39,21 @@ personal-chatbot/
 
 ## Run locally
 
-### 1. Install Vercel CLI (one time)
-
-```bash
-npm install -g vercel
-```
-
-### 2. Add your API key
-
-Create `.env.local` in this folder:
-
-```
-GROQ_API_KEY=gsk_your_key_here
-```
-
-### 3. Start dev server
-
 ```bash
 cd personal-chatbot
-vercel dev
+python run.py
 ```
 
 Open **http://localhost:3000**
+
+Requires Python 3.9+ and `GROQ_API_KEY` in `.env.local`.
+
+### Alternative (Vercel CLI)
+
+```bash
+npm install -g vercel
+vercel dev
+```
 
 ---
 
