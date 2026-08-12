@@ -1,0 +1,249 @@
+{
+  "name": "Jawad Ali",
+  "title": "AI Engineer",
+  "bio": "I'm a results-driven AI/ML Engineer and BS Artificial Intelligence graduate from COMSATS University Islamabad with hands-on experience building production-ready Generative AI systems, LLM applications, and end-to-end automation pipelines. I specialize in designing agentic workflows using LangChain and LangGraph, building RAG pipelines with vector databases, and deploying LLM-powered chatbots via FastAPI and Streamlit. I'm committed to delivering scalable, clean AI architectures that drive measurable business value.",
+  "location": "Rawalpindi/Islamabad, Pakistan",
+  "phone": "+92 315 5720296",
+  "links": {
+    "email": "jawadaliraja2022@gmail.com",
+    "linkedin": "https://www.linkedin.com/in/jawad-ali",
+    "github": "https://github.com/jawadaliraja2022",
+    "portfolio": null
+  },
+  "skills": {
+    "aiAndAgents": [
+      "LangChain",
+      "LangGraph",
+      "Agentic AI",
+      "ReAct Agents",
+      "RAG Pipelines",
+      "Prompt Engineering",
+      "Tool / Function Calling",
+      "Copilot Studio",
+      "Chatbots",
+      "LLMs / Generative AI"
+    ],
+    "llmsAndApis": [
+      "OpenAI GPT-4 / GPT-4o",
+      "Claude API (Anthropic)",
+      "Claude Code",
+      "HuggingFace Transformers",
+      "Google AI / Gemini",
+      "Mistral AI",
+      "Ollama",
+      "Sentence Transformers"
+    ],
+    "mlAndDeepLearning": [
+      "Machine Learning",
+      "Deep Learning",
+      "scikit-learn",
+      "XGBoost",
+      "LightGBM",
+      "CatBoost",
+      "TensorFlow / Keras",
+      "PyTorch",
+      "CNNs",
+      "RNNs",
+      "LSTMs",
+      "Transformers",
+      "Transfer Learning",
+      "Ensemble Methods"
+    ],
+    "vectorDatabases": [
+      "FAISS",
+      "Pinecone",
+      "ChromaDB",
+      "Elasticsearch",
+      "OpenSearch",
+      "Semantic Search"
+    ],
+    "backendAndApis": [
+      "Python",
+      "C",
+      "FastAPI",
+      "Flask",
+      "RESTful API Design",
+      "JWT Authentication",
+      "Software Architecture",
+      "Clean Code Architecture"
+    ],
+    "databases": [
+      "PostgreSQL",
+      "MySQL",
+      "MongoDB",
+      "Redis",
+      "SQLite",
+      "SQL Server",
+      "Firebase"
+    ],
+    "automation": [
+      "n8n",
+      "Make.com",
+      "Webhook Orchestration",
+      "Event-Driven Workflows",
+      "Third-Party API Integration"
+    ],
+    "mlopsAndCloud": [
+      "Docker",
+      "Kubernetes",
+      "MLflow",
+      "CI/CD Pipelines",
+      "AWS (EC2, S3, Lambda)",
+      "Azure",
+      "GCP",
+      "Git",
+      "GitHub"
+    ],
+    "frontend": [
+      "React.js",
+      "Node.js",
+      "Express.js",
+      "MERN Stack",
+      "Streamlit",
+      "Gradio",
+      "JavaScript"
+    ],
+    "dataAndNlp": [
+      "Pandas",
+      "NumPy",
+      "NLTK",
+      "spaCy",
+      "Selenium",
+      "BeautifulSoup",
+      "Data Preprocessing",
+      "Feature Engineering",
+      "Statistical Analysis"
+    ]
+  },
+  "experience": [
+    {
+      "company": "OptimAIze BE",
+      "role": "AI / ML Engineer",
+      "period": "Aug 2025 – Present",
+      "location": "Remote, Belgium",
+      "highlights": [
+        "Designed and deployed autonomous LangChain ReAct agents and LangGraph-based multi-agent systems, automating complex multi-step business workflows across cloud infrastructure.",
+        "Built end-to-end AI automation workflows using n8n for intelligent scheduling, data ingestion, webhook handling, routing, and third-party API orchestration.",
+        "Implemented and deployed RAG pipelines integrating FAISS and Pinecone vector databases for scalable semantic search and document-based question answering.",
+        "Developed production-grade deep learning and classical ML pipelines; integrated trained models into live systems via FastAPI REST APIs.",
+        "Connected and fine-tuned LLMs (OpenAI GPT-4, Claude API, HuggingFace Transformers) to CRMs, databases, and operational services.",
+        "Enforced MLOps best practices including MLflow experiment tracking, Docker containerization, and CI/CD pipelines on AWS and Azure.",
+        "Engineered prompt engineering strategies and tool/function-calling architectures to improve LLM reasoning and reduce hallucinations."
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "name": "Business Analyser Agent",
+      "description": "Autonomous Generative AI system for dynamic business data analysis.",
+      "period": "2026",
+      "stack": ["Python", "LangChain ReAct", "OpenAI API", "FastAPI", "PostgreSQL", "n8n", "Docker", "MLflow", "AWS"],
+      "highlights": [
+        "Built a multi-step autonomous agent using LangChain ReAct with tool-calling, memory management, and intelligent decision routing — deployed on AWS.",
+        "Integrated n8n for automated scheduling, data ingestion pipelines, and cross-service orchestration.",
+        "Delivered FastAPI REST backend connecting the agent to PostgreSQL; containerized with Docker and tracked with MLflow."
+      ]
+    },
+    {
+      "name": "HEZOP Analyzer Agent",
+      "description": "AI-powered HEZOP analysis agent integrated with AutoCAD for process safety engineering.",
+      "period": "2025",
+      "stack": ["Python", "LangChain", "OpenAI API", "AutoCAD Integration", "FastAPI", "Streamlit"],
+      "highlights": [
+        "Built an agent integrated with AutoCAD to analyze P&ID diagrams, identify process hazards, and assist HEZOP engineers.",
+        "Implemented a RAG-based knowledge pipeline over engineering safety documents for domain-specific safety queries."
+      ]
+    },
+    {
+      "name": "Car Price Analyst Agent",
+      "description": "Intelligent agent that scrapes car listings, applies filters, and predicts fair market prices.",
+      "period": "2025",
+      "stack": ["Python", "LangChain", "OpenAI API", "Selenium", "BeautifulSoup", "FastAPI", "SMTP"],
+      "highlights": [
+        "Scrapes second-hand car listings from Belgium-based platforms and predicts fair market prices using ML models.",
+        "Automated end-to-end pipeline from data scraping and price evaluation to autonomous email delivery."
+      ]
+    },
+    {
+      "name": "Vehicle Insurance Prediction — MLOps Pipeline",
+      "description": "End-to-end ML pipeline for vehicle insurance claim prediction with full MLOps lifecycle.",
+      "period": "2026",
+      "stack": ["Python", "scikit-learn", "XGBoost", "MLflow", "Docker", "AWS S3"],
+      "highlights": [
+        "Built complete ML pipeline covering preprocessing, feature engineering, model training, and evaluation.",
+        "Implemented MLflow Model Registry, Docker containerization, and AWS S3 for artifact storage."
+      ]
+    },
+    {
+      "name": "SmartInfo — YouTube & Document Content Analyzer",
+      "description": "Final Year Project: RAG-powered content analyzer for YouTube transcripts and documents.",
+      "period": "2025",
+      "stack": ["Python", "LangChain", "HuggingFace Transformers", "FAISS", "OpenAI API", "React.js", "FastAPI", "Streamlit"],
+      "highlights": [
+        "Designed end-to-end RAG pipeline with FAISS vector search and LangChain agent tools for intelligent Q&A.",
+        "Fine-tuned HuggingFace transformer models; integrated React.js frontend with FastAPI backend.",
+        "Improved answer relevance and reduced hallucination through hybrid retrieval and advanced prompt engineering."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "COMSATS University Islamabad",
+      "degree": "BS in Artificial Intelligence",
+      "period": "2022 – 2026",
+      "coursework": [
+        "Machine Learning",
+        "Deep Learning",
+        "NLP",
+        "Computer Vision",
+        "Data Science",
+        "Statistical Modelling",
+        "Neural Networks",
+        "Databases",
+        "Software Engineering"
+      ]
+    }
+  ],
+  "certifications": [
+    {
+      "name": "Anthropic AI Courses",
+      "period": "May 2026",
+      "courses": [
+        "Claude 101",
+        "Claude Code In Action",
+        "Claude With Anthropic API",
+        "Intro To Agent Skills",
+        "Intro to MCP"
+      ]
+    }
+  ],
+  "faqs": [
+    {
+      "question": "Are you open to remote work?",
+      "answer": "Yes, I'm open to remote work. I'm currently working remotely with OptimAIze BE in Belgium, and I'm comfortable collaborating across time zones."
+    },
+    {
+      "question": "What's your strongest area?",
+      "answer": "My strongest area is building production-ready Generative AI systems — especially agentic workflows with LangChain/LangGraph, RAG pipelines, LLM integrations (OpenAI, Claude), and MLOps deployment with Docker, MLflow, and cloud platforms."
+    },
+    {
+      "question": "How can I contact you?",
+      "answer": "You can reach me through email at jawadaliraja2022@gmail.com, or connect with me on LinkedIn or GitHub (links are in my profile)."
+    }
+  ],
+  "boundaries": [
+    "salary, compensation, or specific rate expectations",
+    "personal or family matters unrelated to my professional work",
+    "political, religious, or controversial social topics",
+    "confidential details about current or past employers beyond what's in my public profile",
+    "making up skills, projects, or experience not listed in my profile",
+    "legal, medical, or financial advice"
+  ],
+  "starterQuestions": [
+    "What are your core skills?",
+    "Tell me about a project you built.",
+    "What's your work experience?",
+    "Are you open to remote work?",
+    "How can I contact you?"
+  ]
+}

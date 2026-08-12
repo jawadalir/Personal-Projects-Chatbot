@@ -1,0 +1,27 @@
+# Dependencies
+node_modules/
+client/node_modules/
+server/node_modules/
+
+# Build output
+client/dist/
+.next/
+out/
+build/
+
+# Environment (never commit secrets)
+.env
+.env.local
+.env*.local
+!.env.example
+
+# Logs & OS
+npm-debug.log*
+.DS_Store
+
+# IDE
+.vercel
+
+# Python virtual env
+venv/
+__pycache__/
