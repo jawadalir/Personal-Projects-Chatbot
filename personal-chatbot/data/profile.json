@@ -81,7 +81,8 @@
       "Make.com",
       "Webhook Orchestration",
       "Event-Driven Workflows",
-      "Third-Party API Integration"
+      "Third-Party API Integration",
+      "Cron Jobs / Scheduled Scraping"
     ],
     "mlopsAndCloud": [
       "Docker",
@@ -110,6 +111,7 @@
       "spaCy",
       "Selenium",
       "BeautifulSoup",
+      "Web Scraping at Scale",
       "Data Preprocessing",
       "Feature Engineering",
       "Statistical Analysis"
@@ -123,66 +125,183 @@
       "location": "Remote, Belgium",
       "highlights": [
         "Designed and deployed autonomous LangChain ReAct agents and LangGraph-based multi-agent systems, automating complex multi-step business workflows across cloud infrastructure.",
-        "Built end-to-end AI automation workflows using n8n for intelligent scheduling, data ingestion, webhook handling, routing, and third-party API orchestration.",
         "Implemented and deployed RAG pipelines integrating FAISS and Pinecone vector databases for scalable semantic search and document-based question answering.",
-        "Developed production-grade deep learning and classical ML pipelines; integrated trained models into live systems via FastAPI REST APIs.",
+        "Developed production-grade deep learning and classical ML pipelines; integrated trained models into live systems.",
         "Connected and fine-tuned LLMs (OpenAI GPT-4, Claude API, HuggingFace Transformers) to CRMs, databases, and operational services.",
         "Enforced MLOps best practices including MLflow experiment tracking, Docker containerization, and CI/CD pipelines on AWS and Azure.",
-        "Engineered prompt engineering strategies and tool/function-calling architectures to improve LLM reasoning and reduce hallucinations."
+        "Engineered prompt engineering strategies and tool/function-calling architectures to improve LLM reasoning and reduce hallucinations.",
+        "Built and delivered a handwritten sentence-checking tool for the company using Tesseract OCR for text extraction and OpenAI for reading/comprehension enhancement, in Python — a normal-scope internal project, not a small experiment.",
+        "Also handled non-technical responsibilities as an early team member at this startup: managed the company LinkedIn page, posting AI-related news, company updates, and general industry content.",
+        "Managed part of the HR process for a period — posting job openings, shortlisting CVs, and moving shortlisted candidates forward in the hiring process.",
+        "Worked solo end-to-end on all technical deliverables in this role, from architecture design to deployment."
       ]
     }
   ],
   "projects": [
     {
-      "name": "Business Analyser Agent",
-      "description": "Autonomous Generative AI system for dynamic business data analysis.",
-      "period": "2026",
-      "stack": ["Python", "LangChain ReAct", "OpenAI API", "FastAPI", "PostgreSQL", "n8n", "Docker", "MLflow", "AWS"],
+      "name": "Car Price Analyst Agent",
+      "description": "My strongest and most complete project: an end-to-end system that scrapes second-hand car listings from Belgian platforms and predicts fair market price via a Streamlit app.",
+      "period": "2025",
+      "stack": ["Python", "LangChain", "OpenAI API", "XGBoost", "Selenium", "BeautifulSoup", "MongoDB", "Streamlit", "Cron Jobs", "Remote Server"],
+      "confidence": "high — most proud of this, primary project to discuss in interviews",
       "highlights": [
-        "Built a multi-step autonomous agent using LangChain ReAct with tool-calling, memory management, and intelligent decision routing — deployed on AWS.",
-        "Integrated n8n for automated scheduling, data ingestion pipelines, and cross-service orchestration.",
-        "Delivered FastAPI REST backend connecting the agent to PostgreSQL; containerized with Docker and tracked with MLflow."
+        "Built a full data pipeline scraping listings from AutoScout24, GoCars, and 2ehands.",
+        "Cleaned and transformed raw scraped data into structured, ML-ready columns.",
+        "Trained XGBoost plus two other models for price prediction, reaching ~92% accuracy against a 97% target.",
+        "Since the accuracy target wasn't met, shipped a rule-based pricing approach for the MVP, while the trained ML model remains deployed live in parallel as the underlying prediction engine.",
+        "Scaled from an initial dataset of 20–30k listings up to 200k+ listings.",
+        "Set up a cron job on a remote server that runs the scraper on a schedule, cleans the new data automatically, and stores it in MongoDB — a self-sustaining data pipeline with no manual trigger.",
+        "Delivered the user-facing product as a Streamlit app: a user opens the app and checks a vehicle's predicted price on demand (no separate trigger needed for the end user).",
+        "Built and worked on entirely solo, from scraping architecture to model training to deployment."
+      ]
+    },
+    {
+      "name": "Business Analyser Agent",
+      "description": "An autonomous agent designed to act as a personal business analyst for a company — answering questions about its projects and generating business documents.",
+      "period": "2026",
+      "stack": ["Python", "LangChain ReAct", "OpenAI API", "Streamlit", "MLflow", "AWS"],
+      "confidence": "medium",
+      "highlights": [
+        "Core goal: build an agent that knows a company's project details and can be queried conversationally about them.",
+        "Generates business proposal documents automatically based on project data and context.",
+        "Delivered as a Streamlit chatbot application that handles both conversational Q&A and document viewing in one interface.",
+        "Built a multi-step autonomous agent using LangChain ReAct with tool-calling, memory management, and intelligent decision routing.",
+        "Note: n8n and FastAPI are listed on the CV for this project, but were not actually implemented — the real, deployed core is the LangChain ReAct agent behind a Streamlit interface.",
+        "Built solo end-to-end."
       ]
     },
     {
       "name": "HEZOP Analyzer Agent",
-      "description": "AI-powered HEZOP analysis agent integrated with AutoCAD for process safety engineering.",
+      "description": "A real client/company project: an AI agent that answers process-safety engineering questions using a RAG pipeline over safety documents, working from AutoCAD-derived process diagrams.",
       "period": "2025",
-      "stack": ["Python", "LangChain", "OpenAI API", "AutoCAD Integration", "FastAPI", "Streamlit"],
+      "stack": ["Python", "LangChain", "OpenAI API", "RAG", "FastAPI", "Streamlit"],
+      "confidence": "medium",
       "highlights": [
-        "Built an agent integrated with AutoCAD to analyze P&ID diagrams, identify process hazards, and assist HEZOP engineers.",
-        "Implemented a RAG-based knowledge pipeline over engineering safety documents for domain-specific safety queries."
-      ]
-    },
-    {
-      "name": "Car Price Analyst Agent",
-      "description": "Intelligent agent that scrapes car listings, applies filters, and predicts fair market prices.",
-      "period": "2025",
-      "stack": ["Python", "LangChain", "OpenAI API", "Selenium", "BeautifulSoup", "FastAPI", "SMTP"],
-      "highlights": [
-        "Scrapes second-hand car listings from Belgium-based platforms and predicts fair market prices using ML models.",
-        "Automated end-to-end pipeline from data scraping and price evaluation to autonomous email delivery."
-      ]
-    },
-    {
-      "name": "Vehicle Insurance Prediction — MLOps Pipeline",
-      "description": "End-to-end ML pipeline for vehicle insurance claim prediction with full MLOps lifecycle.",
-      "period": "2026",
-      "stack": ["Python", "scikit-learn", "XGBoost", "MLflow", "Docker", "AWS S3"],
-      "highlights": [
-        "Built complete ML pipeline covering preprocessing, feature engineering, model training, and evaluation.",
-        "Implemented MLflow Model Registry, Docker containerization, and AWS S3 for artifact storage."
+        "Built for a real client use case (not just a personal exploration project).",
+        "AutoCAD P&ID diagrams were exported to DXF format by an external freelancer (this export step was not built in-house).",
+        "Converted the received DXF files into structured JSON, and built the downstream analysis and RAG pipeline on top of that JSON representation.",
+        "Implemented a RAG-based knowledge pipeline over engineering safety documents so HEZOP engineers can ask natural-language questions and get answers grounded in the safety documentation.",
+        "Primary value delivered: precise, document-grounded answers to engineer questions, rather than automated hazard-detection from the diagram itself.",
+        "Built solo end-to-end on the parts owned in-house (DXF-to-JSON pipeline, RAG system, and Q&A interface)."
       ]
     },
     {
       "name": "SmartInfo — YouTube & Document Content Analyzer",
-      "description": "Final Year Project: RAG-powered content analyzer for YouTube transcripts and documents.",
+      "description": "Final Year Project (academic): a RAG-powered content analyzer for YouTube transcripts and documents.",
       "period": "2025",
       "stack": ["Python", "LangChain", "HuggingFace Transformers", "FAISS", "OpenAI API", "React.js", "FastAPI", "Streamlit"],
+      "confidence": "lowest — least confident discussing this one in depth",
       "highlights": [
-        "Designed end-to-end RAG pipeline with FAISS vector search and LangChain agent tools for intelligent Q&A.",
-        "Fine-tuned HuggingFace transformer models; integrated React.js frontend with FastAPI backend.",
-        "Improved answer relevance and reduced hallucination through hybrid retrieval and advanced prompt engineering."
+        "Academic Final Year Project only — never had real users or production deployment.",
+        "Designed an end-to-end RAG pipeline with FAISS vector search and LangChain agent tools for intelligent Q&A over YouTube transcripts and documents.",
+        "Fine-tuned HuggingFace transformer models; integrated a React.js frontend with a FastAPI backend.",
+        "No formal evaluation metric was used to measure answer quality — improvements were judged through manual/human checking rather than a quantitative benchmark.",
+        "Built solo as an individual academic project."
+      ]
+    },
+    {
+      "name": "Job Portal Web App",
+      "description": "A full-stack MERN job posting web application with authentication and job CRUD functionality.",
+      "period": "2025",
+      "stack": ["React.js", "Node.js", "Express.js", "MongoDB", "Mongoose", "JWT", "bcrypt"],
+      "confidence": "high",
+      "highlights": [
+        "Built full user authentication: registration, login, JWT token-based sessions, bcrypt password hashing with salt.",
+        "Implemented protected routes and middleware-based JWT verification for secured API endpoints.",
+        "Built job management features: post, view, edit, and delete job listings, with jobs linked to user profiles via Mongoose relationships (postedBy references User).",
+        "Designed REST API with endpoints for auth (register/login/me) and jobs (CRUD + get-my-jobs).",
+        "Built the full React frontend: registration/login forms, job listing/browsing, 'My Jobs' management view, and navigation — using React Router and hooks-based state management.",
+        "Built solo end-to-end, both backend and frontend."
+      ]
+    },
+    {
+      "name": "HerMoney Landing Page",
+      "description": "A conversion-focused marketing landing page for a financial education and media brand supporting women in building money confidence.",
+      "period": "2025/2026",
+      "stack": ["React 19", "TypeScript", "Vite 5", "Tailwind CSS 3"],
+      "confidence": "high",
+      "url": "https://her-money-ui-six.vercel.app/",
+      "highlights": [
+        "Built a single-page app blending lifestyle-brand aesthetics with practical financial education content, designed for trust and conversion rather than technical finance language.",
+        "Implemented a multi-language toggle (NL / EN / TR / FR) sharing page logic across languages.",
+        "Structured the page into conversion-focused sections: Hero, Problem, Solution, Social Proof, Programs, Quick Tips, How It Works, Community, Final CTA, and Footer with newsletter signup.",
+        "Designed a card-based UI with a soft lavender/beige palette, scroll-triggered reveal animations, and a fully mobile-responsive layout.",
+        "Deployed on Vercel using Vite's build pipeline.",
+        "Built solo end-to-end, including design direction and copywriting intent."
+      ]
+    },
+    {
+      "name": "Personal Portfolio Website",
+      "description": "My own personal portfolio site.",
+      "period": "2025/2026",
+      "stack": ["React", "Vercel"],
+      "confidence": "high",
+      "url": "https://jawad-ali-rose.vercel.app/",
+      "highlights": [
+        "Built and deployed my personal portfolio showcasing my projects, skills, and background.",
+        "Built solo end-to-end."
+      ]
+    },
+    {
+      "name": "Handwritten Sentence Checker",
+      "description": "A company project (built while at OptimAIze BE) that reads and checks handwritten sentences using OCR combined with LLM-based reading enhancement.",
+      "period": "2025/2026",
+      "stack": ["Python", "Tesseract OCR", "OpenAI API"],
+      "confidence": "medium",
+      "highlights": [
+        "Used Tesseract OCR to extract text from handwritten input.",
+        "Used OpenAI's API to enhance and correct the raw OCR reading, improving accuracy on messy handwriting.",
+        "A normal-scope internal company project — not a quick experiment, but also not a large-scale production system."
+      ]
+    },
+    {
+      "name": "Computer Vision & ML Practice Projects",
+      "description": "A set of personal learning/practice projects covering classic computer vision and ML problems, unpaid and for skill-building rather than client delivery.",
+      "period": "2023 – 2025",
+      "stack": ["Python", "TensorFlow / Keras", "PyTorch", "scikit-learn", "OpenCV"],
+      "confidence": "medium — practice projects, good for demonstrating fundamentals",
+      "highlights": [
+        "Handwritten Digit Classification — trained a classifier (CNN-based) on handwritten digit image data.",
+        "Garbage Detection & Classification — a computer vision project to detect and classify garbage/waste types from images.",
+        "Stock Price Prediction — a time-series ML project predicting stock price movement/trends.",
+        "These were personal practice projects to build foundational ML/CV skills, not paid or client-facing work."
+      ]
+    },
+    {
+      "name": "Freelance: n8n Automation Projects",
+      "description": "Freelance automation workflows built in n8n for clients, integrating APIs, LLMs, and messaging/notification systems.",
+      "period": "2025/2026",
+      "stack": ["n8n", "OpenAI API", "Apify", "Google Sheets API", "Telegram API", "Webhooks"],
+      "confidence": "high",
+      "highlights": [
+        "Apify Listings Processing & Alert Automation — built an n8n workflow that fetches listing data from an Apify dataset via HTTP request, sends each listing to OpenAI for scoring against predefined prompts, filters by score, stores approved listings in Google Sheets (with duplicate prevention), and sends formatted alerts to Telegram automatically.",
+        "Amazon Wine Recommendation Automation — built an n8n workflow that searches Amazon.it for wine products based on a user's text request and budget, retrieves product data via an external scraping/API service, verifies availability, filters down to exactly two suitable recommendations, generates clean ASIN-format product links, and returns the result as structured JSON via webhook."
+      ]
+    },
+    {
+      "name": "Freelance: Vehicle Departure Prediction (Power BI)",
+      "description": "A paid freelance analytics project predicting which drivers are likely to be late vs on-time for departures, delivered with a Power BI dashboard and written report.",
+      "period": "2025",
+      "stack": ["Power BI", "Python", "Data Analysis"],
+      "confidence": "medium — some details forgotten, documentation wasn't kept at the time",
+      "highlights": [
+        "Built a predictive analysis identifying which drivers were likely to be late vs on-time for departures.",
+        "Delivered a Power BI dashboard visualizing the analysis for the client.",
+        "Produced a 5-page written report summarizing findings and predictions as the final client deliverable.",
+        "Paid freelance client work.",
+        "Note: some finer details of this project were not documented at the time and aren't fully recalled — going forward, documentation is a top priority for all new projects."
+      ]
+    },
+    {
+      "name": "Vehicle Insurance Prediction — MLOps Pipeline",
+      "description": "A learning project built by following an MLOps tutorial to practice the full ML lifecycle, not an original production system.",
+      "period": "2026",
+      "stack": ["Python", "scikit-learn", "XGBoost", "MLflow", "Docker", "AWS S3"],
+      "confidence": "low — built primarily as a guided learning exercise, not confident going deep on internals",
+      "highlights": [
+        "Followed a YouTube tutorial to learn end-to-end MLOps practices (data ingestion, validation, transformation, training, evaluation, deployment).",
+        "Implemented MLflow Model Registry, Docker containerization, and AWS S3 for artifact storage as part of the guided pipeline.",
+        "Primary purpose was hands-on MLOps learning rather than solving an original business problem — best framed in interviews as 'a structured pipeline I built to learn production MLOps practices.'"
       ]
     }
   ],
@@ -224,7 +343,15 @@
     },
     {
       "question": "What's your strongest area?",
-      "answer": "My strongest area is building production-ready Generative AI systems — especially agentic workflows with LangChain/LangGraph, RAG pipelines, LLM integrations (OpenAI, Claude), and MLOps deployment with Docker, MLflow, and cloud platforms."
+      "answer": "My strongest area is building production-ready Generative AI systems — especially agentic workflows with LangChain/LangGraph, RAG pipelines, LLM integrations (OpenAI, Claude), and end-to-end pipelines that go from data scraping to a deployed model."
+    },
+    {
+      "question": "Which project are you most confident discussing in depth?",
+      "answer": "The Car Price Analyst Agent — I built the entire pipeline solo, from web scraping across multiple sites, to data cleaning at 200k+ record scale, to model training and comparison, to a scheduled cron-based scraping system on a remote server, to the final Streamlit product."
+    },
+    {
+      "question": "Do you always work in a team?",
+      "answer": "No — I've built all of my listed projects solo, end-to-end, including my current work at OptimAIze BE."
     },
     {
       "question": "How can I contact you?",
@@ -237,11 +364,13 @@
     "political, religious, or controversial social topics",
     "confidential details about current or past employers beyond what's in my public profile",
     "making up skills, projects, or experience not listed in my profile",
+    "overstating confidence or claiming deep expertise on projects marked as 'low confidence' — be honest that these were learning exercises",
     "legal, medical, or financial advice"
   ],
   "starterQuestions": [
     "What are your core skills?",
-    "Tell me about a project you built.",
+    "Tell me about the Car Price Analyst Agent.",
+    "Tell me about your freelance automation projects.",
     "What's your work experience?",
     "Are you open to remote work?",
     "How can I contact you?"

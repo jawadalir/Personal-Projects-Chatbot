@@ -2,42 +2,111 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0c0c10" />
     <title>Jawad Ali — AI Engineer | Chat</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&display=swap"
+      rel="stylesheet"
+    />
     <link rel="stylesheet" href="/style.css" />
   </head>
   <body>
-    <div class="page">
-      <header class="hero">
-        <p class="eyebrow">AI Portfolio Representative</p>
-        <h1 id="page-title">Chat with me</h1>
-        <p id="page-subtitle" class="subtitle">Loading...</p>
-      </header>
+    <div class="app">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+          <div class="brand">
+            <span class="brand-mark">JA</span>
+            <div>
+              <span class="brand-title">Portfolio Chat</span>
+              <span class="brand-sub">Live AI Representative</span>
+            </div>
+          </div>
 
-      <main class="chat-card">
-        <div class="chat-header">
-          <div class="avatar" id="avatar">JA</div>
-          <div>
-            <h2 id="chat-name">Jawad Ali</h2>
-            <p id="chat-title">AI Engineer</p>
+          <div class="profile-card">
+            <div class="profile-avatar" id="avatar">JA</div>
+            <h1 id="chat-name">Jawad Ali</h1>
+            <p id="chat-title" class="profile-role">AI Engineer</p>
+            <p id="page-subtitle" class="profile-location">Loading...</p>
+            <div class="status-badge">
+              <span class="status-dot"></span>
+              Online · Ready to chat
+            </div>
+          </div>
+
+          <div class="sidebar-section">
+            <h3>Topics I can discuss</h3>
+            <ul class="topic-list">
+              <li><span class="topic-icon">⚡</span> Skills & AI stack</li>
+              <li><span class="topic-icon">💼</span> Work experience</li>
+              <li><span class="topic-icon">🚀</span> Projects & agents</li>
+              <li><span class="topic-icon">🎓</span> Education & certs</li>
+            </ul>
+          </div>
+
+          <p class="sidebar-footer">
+            Responses are based on my real CV data.<br />Ask anything professional.
+          </p>
+        </div>
+      </aside>
+
+      <!-- Mobile overlay -->
+      <div class="sidebar-overlay" id="sidebar-overlay" hidden></div>
+
+      <!-- Chat -->
+      <main class="chat-panel">
+        <header class="chat-topbar">
+          <button type="button" class="menu-btn" id="menu-btn" aria-label="Open profile">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M3 12h18M3 6h18M3 18h18"/>
+            </svg>
+          </button>
+          <div class="topbar-info">
+            <h2 id="page-title">Chat with Jawad</h2>
+            <p id="topbar-sub">AI Engineer · Your live representative</p>
+          </div>
+          <div class="topbar-avatar" id="topbar-avatar">JA</div>
+        </header>
+
+        <!-- Scrollable messages area (only this scrolls) -->
+        <div class="messages-scroll" id="messages-scroll">
+          <div class="messages-inner">
+            <div class="messages" id="messages"></div>
+
+            <div class="starters-wrap" id="starters-wrap">
+              <p class="starters-label">Try asking</p>
+              <div class="starters" id="starters"></div>
+            </div>
           </div>
         </div>
 
-        <div class="messages" id="messages"></div>
-
-        <div class="starters" id="starters"></div>
+        <button type="button" class="scroll-bottom-btn" id="scroll-bottom-btn" aria-label="Scroll to latest" hidden>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+            <path d="M12 5v14M5 12l7 7 7-7"/>
+          </svg>
+        </button>
 
         <p class="error" id="error" hidden></p>
 
-        <form class="input-row" id="chat-form">
-          <input
-            type="text"
-            id="message-input"
-            placeholder="Ask me anything..."
-            autocomplete="off"
-          />
-          <button type="submit" id="send-btn">Send</button>
-        </form>
+        <footer class="chat-footer">
+          <form class="input-row" id="chat-form">
+            <input
+              type="text"
+              id="message-input"
+              placeholder="Message Jawad..."
+              autocomplete="off"
+              enterkeyhint="send"
+            />
+            <button type="submit" id="send-btn" aria-label="Send message">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/>
+              </svg>
+            </button>
+          </form>
+        </footer>
       </main>
     </div>
 
