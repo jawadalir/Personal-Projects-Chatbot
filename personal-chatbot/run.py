@@ -12,7 +12,6 @@ from urllib.parse import urlparse
 ROOT = Path(__file__).resolve().parent
 PUBLIC = ROOT / "public"
 
-# Load .env.local or .env
 for env_file in (ROOT / ".env.local", ROOT / ".env"):
     if env_file.exists():
         for line in env_file.read_text(encoding="utf-8").splitlines():
@@ -24,10 +23,26 @@ for env_file in (ROOT / ".env.local", ROOT / ".env"):
 
 sys.path.insert(0, str(ROOT))
 
-from lib.groq import chat_completion  # noqa: E402
+from lib.groq import chat_completion, stream_chat_tokens  # noqa: E402
 from lib.prompt import get_public_profile  # noqa: E402
 
 PORT = int(os.environ.get("PORT", 3000))
+
+MIME_TYPES = {
+    ".html": "text/html; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".js": "application/javascript; charset=utf-8",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+    ".svg": "image/svg+xml",
+}
+
+
+def _sse_event(data):
+    return f"data: {json.dumps(data)}\n\n".encode("utf-8")
 
 
 class DevHandler(BaseHTTPRequestHandler):
@@ -64,20 +79,20 @@ class DevHandler(BaseHTTPRequestHandler):
             self.send_error(404)
             return
 
-        types = {
-            ".html": "text/html; charset=utf-8",
-            ".css": "text/css; charset=utf-8",
-            ".js": "application/javascript; charset=utf-8",
-        }
-        return self._send_file(file_path, types.get(file_path.suffix, "application/octet-stream"))
+        return self._send_file(file_path, MIME_TYPES.get(file_path.suffix.lower(), "application/octet-stream"))
 
     def do_POST(self):
         path = urlparse(self.path).path
 
-        if path != "/api/chat":
-            self.send_error(404)
-            return
+        if path == "/api/chat/stream":
+            return self._handle_stream()
 
+        if path == "/api/chat":
+            return self._handle_chat()
+
+        self.send_error(404)
+
+    def _handle_chat(self):
         length = int(self.headers.get("Content-Length", 0))
         raw = self.rfile.read(length) if length else b"{}"
 
@@ -93,6 +108,42 @@ class DevHandler(BaseHTTPRequestHandler):
             return self._send_json(status, data)
         except Exception as e:
             print(f"Error: {e}")
+            return self._send_json(500, {"error": "An unexpected error occurred."})
+
+    def _handle_stream(self):
+        length = int(self.headers.get("Content-Length", 0))
+        raw = self.rfile.read(length) if length else b"{}"
+
+        try:
+            body = json.loads(raw.decode("utf-8"))
+            message = (body.get("message") or "").strip()
+            history = body.get("history") or []
+
+            if not message:
+                return self._send_json(400, {"error": "Message is required."})
+
+            self.send_response(200)
+            self.send_header("Content-Type", "text/event-stream; charset=utf-8")
+            self.send_header("Cache-Control", "no-cache, no-transform")
+            self.send_header("Connection", "close")
+            self.send_header("X-Accel-Buffering", "no")
+            self.end_headers()
+
+            try:
+                for token in stream_chat_tokens(message, history):
+                    self.wfile.write(_sse_event({"token": token}))
+                    self.wfile.flush()
+                self.wfile.write(_sse_event({"done": True}))
+                self.wfile.flush()
+            except (ValueError, OSError, BrokenPipeError) as e:
+                print(f"Stream error: {e}")
+                try:
+                    self.wfile.write(_sse_event({"error": str(e)}))
+                    self.wfile.flush()
+                except Exception:
+                    pass
+        except Exception as e:
+            print(f"Stream setup error: {e}")
             return self._send_json(500, {"error": "An unexpected error occurred."})
 
 

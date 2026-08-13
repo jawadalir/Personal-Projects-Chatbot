@@ -27,7 +27,14 @@
           </div>
 
           <div class="profile-card">
-            <div class="profile-avatar" id="avatar">JA</div>
+            <div class="avatar-live-wrap">
+              <span class="avatar-live-ring"></span>
+              <span class="avatar-live-ring avatar-live-ring-2"></span>
+              <div class="profile-avatar" id="avatar">
+                <img id="avatar-img" src="" alt="Jawad Ali" hidden />
+                <span id="avatar-initials">JA</span>
+              </div>
+            </div>
             <h1 id="chat-name">Jawad Ali</h1>
             <p id="chat-title" class="profile-role">AI Engineer</p>
             <p id="page-subtitle" class="profile-location">Loading...</p>
@@ -35,6 +42,7 @@
               <span class="status-dot"></span>
               Online · Ready to chat
             </div>
+            <div class="contact-links" id="contact-links"></div>
           </div>
 
           <div class="sidebar-section">
@@ -68,7 +76,10 @@
             <h2 id="page-title">Chat with Jawad</h2>
             <p id="topbar-sub">AI Engineer · Your live representative</p>
           </div>
-          <div class="topbar-avatar" id="topbar-avatar">JA</div>
+          <div class="topbar-avatar" id="topbar-avatar">
+            <img id="topbar-img" src="" alt="" hidden />
+            <span id="topbar-initials">JA</span>
+          </div>
         </header>
 
         <!-- Scrollable messages area (only this scrolls) -->

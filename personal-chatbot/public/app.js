@@ -10,11 +10,13 @@ const errorEl = document.getElementById("error");
 const sidebar = document.getElementById("sidebar");
 const sidebarOverlay = document.getElementById("sidebar-overlay");
 const menuBtn = document.getElementById("menu-btn");
+const contactLinksEl = document.getElementById("contact-links");
 
 let profile = null;
 let messages = [];
 let loading = false;
 let botInitials = "JA";
+let photoUrl = null;
 let autoScroll = true;
 
 const SCROLL_THRESHOLD = 100;
@@ -79,6 +81,53 @@ function closeSidebar() {
 menuBtn?.addEventListener("click", openSidebar);
 sidebarOverlay?.addEventListener("click", closeSidebar);
 
+function applyPhoto(url) {
+  photoUrl = url;
+  if (!url) return;
+
+  const setImg = (imgEl, wrapEl, initialsEl) => {
+    if (!imgEl) return;
+    imgEl.src = url;
+    imgEl.hidden = false;
+    imgEl.onload = () => {
+      wrapEl?.classList.add("has-photo");
+      if (initialsEl) initialsEl.style.display = "none";
+    };
+    imgEl.onerror = () => {
+      imgEl.hidden = true;
+      wrapEl?.classList.remove("has-photo");
+    };
+  };
+
+  setImg(
+    document.getElementById("avatar-img"),
+    document.getElementById("avatar"),
+    document.getElementById("avatar-initials")
+  );
+  setImg(
+    document.getElementById("topbar-img"),
+    document.getElementById("topbar-avatar"),
+    document.getElementById("topbar-initials")
+  );
+}
+
+function createBotAvatarEl() {
+  const av = document.createElement("div");
+  av.className = "bot-avatar";
+  if (photoUrl) {
+    av.classList.add("has-photo");
+    const img = document.createElement("img");
+    img.src = photoUrl;
+    img.alt = profile?.name || "Jawad";
+    av.appendChild(img);
+  } else {
+    const span = document.createElement("span");
+    span.textContent = botInitials;
+    av.appendChild(span);
+  }
+  return av;
+}
+
 function addBubble(role, content) {
   const row = document.createElement("div");
   row.className = `bubble-row ${role}`;
@@ -95,10 +144,7 @@ function addBubble(role, content) {
   bubble.textContent = content;
 
   if (role === "bot") {
-    const av = document.createElement("div");
-    av.className = "bot-avatar";
-    av.textContent = botInitials;
-    row.appendChild(av);
+    row.appendChild(createBotAvatarEl());
   }
 
   wrap.appendChild(label);
@@ -106,6 +152,31 @@ function addBubble(role, content) {
   row.appendChild(wrap);
   messagesEl.appendChild(row);
   scrollToBottom();
+}
+
+function createStreamingBotBubble() {
+  const row = document.createElement("div");
+  row.className = "bubble-row bot";
+
+  const wrap = document.createElement("div");
+  wrap.className = "bubble-wrap";
+
+  const label = document.createElement("span");
+  label.className = "bubble-label";
+  label.textContent = profile?.name || "Jawad";
+
+  const bubble = document.createElement("div");
+  bubble.className = "bubble bot streaming";
+  bubble.textContent = "";
+
+  row.appendChild(createBotAvatarEl());
+  wrap.appendChild(label);
+  wrap.appendChild(bubble);
+  row.appendChild(wrap);
+  messagesEl.appendChild(row);
+  scrollToBottom(true);
+
+  return { row, bubble };
 }
 
 function showLoading(show) {
@@ -120,10 +191,7 @@ function showLoading(show) {
   row.className = "bubble-row bot";
   row.id = "loading";
 
-  const av = document.createElement("div");
-  av.className = "bot-avatar";
-  av.textContent = botInitials;
-  row.appendChild(av);
+  row.appendChild(createBotAvatarEl());
 
   const wrap = document.createElement("div");
   wrap.className = "bubble-wrap";
@@ -136,6 +204,29 @@ function showLoading(show) {
 
   messagesEl.appendChild(row);
   scrollToBottom(true);
+}
+
+function renderContactLinks(links) {
+  if (!contactLinksEl || !links) return;
+  contactLinksEl.innerHTML = "";
+
+  const items = [
+    links.email && { href: `mailto:${links.email}`, label: "Email" },
+    links.linkedin && { href: links.linkedin, label: "LinkedIn", external: true },
+    links.portfolio && { href: links.portfolio, label: "Portfolio", external: true },
+    links.github && { href: links.github, label: "GitHub", external: true },
+  ].filter(Boolean);
+
+  items.forEach(({ href, label, external }) => {
+    const a = document.createElement("a");
+    a.href = href;
+    a.textContent = label;
+    if (external) {
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    }
+    contactLinksEl.appendChild(a);
+  });
 }
 
 function renderStarters() {
@@ -168,6 +259,140 @@ function setError(msg) {
   errorEl.textContent = msg;
 }
 
+function friendlyFetchError(err) {
+  const msg = err?.message || "";
+  if (
+    msg === "Failed to fetch" ||
+    err?.name === "TypeError" ||
+    err?.name === "AbortError"
+  ) {
+    return "Cannot reach the server. Run python run.py and open http://127.0.0.1:3000";
+  }
+  return msg || "Something went wrong. Please try again.";
+}
+
+async function fetchChatReply(message, history) {
+  let res;
+  try {
+    res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, history }),
+    });
+  } catch (err) {
+    throw new Error(friendlyFetchError(err));
+  }
+
+  const data = await res.json().catch(() => ({}));
+  if (!res.ok) throw new Error(data.error || "Request failed.");
+  if (!data.reply?.trim()) throw new Error("Empty response from AI service.");
+  return data.reply;
+}
+
+function parseSseChunk(part, handlers) {
+  const line = part.trim();
+  if (!line.startsWith("data: ")) return false;
+
+  const data = JSON.parse(line.slice(6));
+  if (data.error) throw new Error(data.error);
+  if (data.done) {
+    handlers.onDone?.();
+    return true;
+  }
+  if (data.token) handlers.onToken?.(data.token);
+  return false;
+}
+
+async function streamReply(message, history) {
+  const controller = new AbortController();
+  const timeoutId = setTimeout(() => controller.abort(), 90000);
+
+  let res;
+  try {
+    res = await fetch("/api/chat/stream", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ message, history }),
+      signal: controller.signal,
+    });
+  } catch (err) {
+    clearTimeout(timeoutId);
+    const error = new Error(friendlyFetchError(err));
+    error.partial = "";
+    throw error;
+  }
+
+  if (!res.ok) {
+    clearTimeout(timeoutId);
+    const data = await res.json().catch(() => ({}));
+    const error = new Error(data.error || "Stream request failed.");
+    error.partial = "";
+    throw error;
+  }
+
+  const reader = res.body?.getReader();
+  if (!reader) {
+    clearTimeout(timeoutId);
+    const error = new Error("Streaming is not supported in this browser.");
+    error.partial = "";
+    throw error;
+  }
+
+  const decoder = new TextDecoder();
+  let buffer = "";
+  let fullText = "";
+
+  showLoading(false);
+  const { row, bubble } = createStreamingBotBubble();
+
+  try {
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+
+      buffer += decoder.decode(value, { stream: true });
+      const parts = buffer.split("\n\n");
+      buffer = parts.pop() || "";
+
+      let streamDone = false;
+      for (const part of parts) {
+        try {
+          const finished = parseSseChunk(part, {
+            onToken: (token) => {
+              fullText += token;
+              bubble.textContent = fullText;
+              scrollToBottom();
+            },
+            onDone: () => {
+              streamDone = true;
+            },
+          });
+          if (finished) streamDone = true;
+        } catch (e) {
+          if (e.message !== "Unexpected end of JSON input") throw e;
+        }
+      }
+
+      if (streamDone) {
+        await reader.cancel().catch(() => {});
+        break;
+      }
+    }
+
+    bubble.classList.remove("streaming");
+    if (!fullText.trim()) throw new Error("Empty response from AI service.");
+    return fullText;
+  } catch (err) {
+    bubble.classList.remove("streaming");
+    if (!fullText.trim()) row.remove();
+    const error = new Error(err.message || friendlyFetchError(err));
+    error.partial = fullText;
+    throw error;
+  } finally {
+    clearTimeout(timeoutId);
+  }
+}
+
 async function sendMessage(text) {
   const trimmed = text.trim();
   if (!trimmed || loading) return;
@@ -187,19 +412,25 @@ async function sendMessage(text) {
   showLoading(true);
 
   try {
-    const res = await fetch("/api/chat", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: trimmed, history }),
-    });
+    let reply;
+    try {
+      reply = await streamReply(trimmed, history);
+    } catch (streamErr) {
+      if (streamErr.partial?.trim()) {
+        reply = streamErr.partial.trim();
+      } else {
+        showLoading(true);
+        reply = await fetchChatReply(trimmed, history);
+        addBubble("bot", reply);
+      }
+    }
 
-    const data = await res.json();
-    if (!res.ok) throw new Error(data.error || "Request failed.");
-
-    messages.push({ role: "assistant", content: data.reply });
-    addBubble("bot", data.reply);
+    if (reply) {
+      messages.push({ role: "assistant", content: reply });
+    }
   } catch (err) {
-    setError(err.message);
+    setError(friendlyFetchError(err));
+    showLoading(false);
   } finally {
     loading = false;
     input.disabled = false;
@@ -228,9 +459,12 @@ async function init() {
     document.getElementById("page-subtitle").textContent = profile.location;
     document.getElementById("chat-name").textContent = profile.name;
     document.getElementById("chat-title").textContent = profile.title;
-    document.getElementById("avatar").textContent = botInitials;
-    document.getElementById("topbar-avatar").textContent = botInitials;
+    document.getElementById("avatar-initials").textContent = botInitials;
+    document.getElementById("topbar-initials").textContent = botInitials;
     document.querySelector(".brand-mark").textContent = botInitials;
+
+    if (profile.photo) applyPhoto(profile.photo);
+    renderContactLinks(profile.links);
 
     const welcome = `Hi! I'm ${profile.name}, ${profile.title}. Ask me anything about my skills, experience, projects, or background — I'm here to represent myself.`;
     messages.push({ role: "assistant", content: welcome });

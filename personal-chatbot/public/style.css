@@ -132,10 +132,44 @@ body {
   margin-bottom: 1.5rem;
 }
 
+.avatar-live-wrap {
+  position: relative;
+  width: 5.5rem;
+  height: 5.5rem;
+  margin: 0 auto 0.875rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.avatar-live-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: 1.15rem;
+  border: 2px solid rgba(99, 102, 241, 0.45);
+  animation: liveRing 2.4s ease-out infinite;
+}
+
+.avatar-live-ring-2 {
+  animation-delay: 1.2s;
+}
+
+@keyframes liveRing {
+  0% {
+    transform: scale(0.92);
+    opacity: 0.9;
+  }
+  70%, 100% {
+    transform: scale(1.18);
+    opacity: 0;
+  }
+}
+
 .profile-avatar {
+  position: relative;
+  z-index: 1;
   width: 4.5rem;
   height: 4.5rem;
-  margin: 0 auto 0.875rem;
   border-radius: 1rem;
   background: linear-gradient(145deg, #6366f1, #7c3aed);
   display: flex;
@@ -144,7 +178,44 @@ body {
   font-size: 1.1rem;
   font-weight: 700;
   color: #fff;
+  overflow: hidden;
   box-shadow: 0 8px 24px var(--accent-glow), inset 0 0 0 1px rgba(255, 255, 255, 0.12);
+}
+
+.profile-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.profile-avatar.has-photo #avatar-initials {
+  display: none;
+}
+
+.contact-links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.4rem;
+  margin-top: 1rem;
+}
+
+.contact-links a {
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  padding: 0.35rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  transition: background 0.15s, color 0.15s;
+}
+
+.contact-links a:hover {
+  background: rgba(99, 102, 241, 0.25);
+  color: #fff;
 }
 
 .profile-card h1 {
@@ -312,6 +383,17 @@ body {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
+  overflow: hidden;
+}
+
+.topbar-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.topbar-avatar.has-photo span {
+  display: none;
 }
 
 /* ── Messages scroll (THE scroll container) ── */
@@ -368,6 +450,32 @@ body {
   flex-shrink: 0;
   align-self: flex-end;
   margin-bottom: 2px;
+  overflow: hidden;
+}
+
+.bot-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bot-avatar.has-photo span {
+  display: none;
+}
+
+.bubble.streaming::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1em;
+  background: var(--accent);
+  margin-left: 2px;
+  vertical-align: text-bottom;
+  animation: cursorBlink 0.8s step-end infinite;
+}
+
+@keyframes cursorBlink {
+  50% { opacity: 0; }
 }
 
 .bubble-wrap {

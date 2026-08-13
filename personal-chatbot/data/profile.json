@@ -6,10 +6,11 @@
   "phone": "+92 315 5720296",
   "links": {
     "email": "jawadaliraja2022@gmail.com",
-    "linkedin": "https://www.linkedin.com/in/jawad-ali",
-    "github": "https://github.com/jawadaliraja2022",
-    "portfolio": null
+    "linkedin": "https://www.linkedin.com/in/jawad-ali-142645286/",
+    "github": "https://github.com/jawadalir",
+    "portfolio": "https://jawad-ali-rose.vercel.app/"
   },
+  "photo": "/avatar/jawad.png",
   "skills": {
     "aiAndAgents": [
       "LangChain",

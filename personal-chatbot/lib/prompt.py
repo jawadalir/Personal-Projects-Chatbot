@@ -12,10 +12,18 @@ def load_profile():
 
 def get_public_profile():
     profile = load_profile()
+    links = profile.get("links") or {}
     return {
         "name": profile["name"],
         "title": profile["title"],
         "location": profile.get("location", ""),
+        "photo": profile.get("photo", "/avatar/jawad.png"),
+        "links": {
+            "email": links.get("email"),
+            "linkedin": links.get("linkedin"),
+            "github": links.get("github"),
+            "portfolio": links.get("portfolio"),
+        },
         "starterQuestions": profile.get("starterQuestions", []),
     }
 
