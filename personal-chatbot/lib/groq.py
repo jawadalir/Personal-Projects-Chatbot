@@ -1,5 +1,6 @@
 import json
 import os
+import re
 import socket
 import urllib.error
 import urllib.request
@@ -8,8 +9,36 @@ from lib.prompt import build_system_prompt, load_profile
 
 GROQ_HOST = "api.groq.com"
 GROQ_PATH = "/openai/v1/chat/completions"
-MODEL = "llama-3.3-70b-versatile"
+# 70b has a lower free-tier daily token cap; 8b-instant has a separate quota.
+DEFAULT_MODEL = "llama-3.1-8b-instant"
 REQUEST_TIMEOUT = 90
+MAX_TOKENS = 768
+
+
+def _get_model():
+    return os.environ.get("GROQ_MODEL", DEFAULT_MODEL).strip() or DEFAULT_MODEL
+
+
+def _parse_groq_http_error(status, err_body):
+    """Turn Groq API errors into user-friendly messages."""
+    try:
+        payload = json.loads(err_body)
+        message = payload.get("error", {}).get("message", "")
+    except json.JSONDecodeError:
+        message = err_body[:200]
+
+    if status == 401:
+        return "Invalid Groq API key. Check GROQ_API_KEY in .env.local."
+    if status == 429:
+        match = re.search(r"try again in ([^.]+)", message, re.IGNORECASE)
+        if match:
+            return f"Groq rate limit reached. Please try again in {match.group(1).strip()}."
+        return "Groq rate limit reached. Wait a few minutes or switch GROQ_MODEL in .env.local."
+    if "1010" in message:
+        return "Request blocked by Cloudflare. Please try again."
+    if message:
+        return message[:240]
+    return "Failed to get a response from the AI service."
 
 GROQ_HEADERS = {
     "User-Agent": "PersonalChatbot/1.0",
@@ -35,7 +64,7 @@ def _build_messages(message, history=None):
         {"role": m["role"], "content": m["content"]}
         for m in history
         if m.get("role") in ("user", "assistant")
-    ][-10:]
+    ][-6:]
     messages.extend(history_msgs)
     messages.append({"role": "user", "content": message})
     return messages
@@ -75,10 +104,10 @@ def chat_completion(message, history=None, api_key=None):
     messages = _build_messages(message, history)
     req = _groq_request(
         {
-            "model": MODEL,
+            "model": _get_model(),
             "messages": messages,
             "temperature": 0.4,
-            "max_tokens": 1024,
+            "max_tokens": MAX_TOKENS,
         },
         api_key,
     )
@@ -93,11 +122,7 @@ def chat_completion(message, history=None, api_key=None):
     except urllib.error.HTTPError as e:
         err = e.read().decode("utf-8", errors="replace")
         print(f"Groq API error: {e.code} {err[:300]}")
-        if e.code == 401:
-            return 502, {"error": "Invalid Groq API key. Check GROQ_API_KEY in .env.local."}
-        if "1010" in err:
-            return 502, {"error": "Request blocked by Cloudflare. Please try again."}
-        return 502, {"error": "Failed to get a response from the AI service."}
+        return 502, {"error": _parse_groq_http_error(e.code, err)}
     except (urllib.error.URLError, socket.timeout, TimeoutError) as e:
         print(f"Groq network error: {e}")
         return 502, {"error": "Could not reach Groq API. Check your internet connection."}
@@ -115,10 +140,10 @@ def stream_chat_tokens(message, history=None, api_key=None):
     messages = _build_messages(message, history)
     req = _groq_request(
         {
-            "model": MODEL,
+            "model": _get_model(),
             "messages": messages,
             "temperature": 0.4,
-            "max_tokens": 1024,
+            "max_tokens": MAX_TOKENS,
             "stream": True,
         },
         api_key,
@@ -135,11 +160,7 @@ def stream_chat_tokens(message, history=None, api_key=None):
     except urllib.error.HTTPError as e:
         err = e.read().decode("utf-8", errors="replace")
         print(f"Groq stream error: {e.code} {err[:300]}")
-        if e.code == 401:
-            raise ValueError("Invalid Groq API key.") from e
-        if "1010" in err:
-            raise ValueError("Request blocked by Cloudflare. Please try again.") from e
-        raise ValueError("Failed to get a response from the AI service.") from e
+        raise ValueError(_parse_groq_http_error(e.code, err)) from e
     except (urllib.error.URLError, socket.timeout, TimeoutError) as e:
         print(f"Groq stream network error: {e}")
         raise ValueError("Could not reach Groq API. Check your internet connection.") from e
